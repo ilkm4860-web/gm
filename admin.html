@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#07090b">
+<title>Görkem Yönetim | Admin Panel</title>
+<style>
+:root{
+  --bg:#07090b;
+  --bg-2:#0b0f12;
+  --card:#0f1418;
+  --card-2:#12181d;
+  --gold:#d8a344;
+  --gold-2:#f0c66a;
+  --gold-soft:rgba(216,163,68,.12);
+  --line:rgba(255,255,255,.08);
+  --line-strong:rgba(216,163,68,.28);
+  --text:#f3f1ea;
+  --muted:#8f989d;
+  --green:#69d184;
+  --red:#ef6b67;
+  --blue:#6ca8ff;
+  --shadow:0 30px 80px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  min-height:100vh;
+  color:var(--text);
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  background:
+    radial-gradient(circle at 80% 0%,rgba(216,163,68,.09),transparent 24rem),
+    radial-gradient(circle at 0% 50%,rgba(82,106,120,.05),transparent 24rem),
+    linear-gradient(180deg,#06080a 0%,#080b0d 100%);
+}
+body:before{
+  content:"";
+  position:fixed;inset:0;pointer-events:none;opacity:.04;z-index:0;
+  background-image:linear-gradient(rgba(255,255,255,.7) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.7) 1px,transparent 1px);
+  background-size:48px 48px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.75),transparent 90%);
+}
+button,input{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+.wrap{position:relative;z-index:1;width:min(1280px,calc(100% - 34px));margin:auto}
+.topline{height:3px;background:linear-gradient(90deg,transparent 0%,var(--gold) 30%,#fff0bd 50%,var(--gold) 70%,transparent 100%)}
+.header{
+  position:sticky;top:0;z-index:30;
+  background:rgba(6,8,10,.78);
+  border-bottom:1px solid var(--line);
+  backdrop-filter:blur(18px);
+}
+.header-in{
+  min-height:78px;display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.brand{display:flex;align-items:center;gap:13px}
+.brand-mark{
+  width:40px;height:40px;border:1px solid var(--gold);
+  display:grid;place-items:center;
+  transform:skew(-10deg);
+  background:linear-gradient(135deg,rgba(216,163,68,.16),rgba(216,163,68,.03));
+  box-shadow:0 0 30px rgba(216,163,68,.08);
+}
+.brand-mark span{transform:skew(10deg);font-weight:900;color:var(--gold-2);font-size:12px;letter-spacing:.08em}
+.brand-copy strong{display:block;font-size:13px;letter-spacing:.14em}
+.brand-copy small{display:block;color:var(--muted);font-size:9px;letter-spacing:.19em;text-transform:uppercase;margin-top:3px}
+.header-actions{display:flex;align-items:center;gap:10px}
+.btn{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.035);
+  color:var(--text);
+  min-height:42px;padding:0 15px;
+  border-radius:10px;
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  transition:.25s;
+}
+.btn:hover{border-color:var(--line-strong);transform:translateY(-1px);background:rgba(255,255,255,.055)}
+.btn.gold{background:var(--gold);color:#111;border-color:var(--gold);box-shadow:0 8px 30px rgba(216,163,68,.15)}
+.btn.gold:hover{background:var(--gold-2);border-color:var(--gold-2)}
+.btn.ghost{padding:0 12px}
+.btn.icon{width:42px;padding:0}
+.page{padding:34px 0 60px}
+.hero{
+  display:grid;grid-template-columns:1.25fr .75fr;gap:18px;align-items:stretch;
+  margin-bottom:18px;
+}
+.hero-main,.hero-side,.card{
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.025),rgba(255,255,255,.005)),
+    var(--card);
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow:var(--shadow);
+}
+.hero-main{
+  padding:28px 30px;
+  position:relative;overflow:hidden;
+}
+.hero-main:after{
+  content:"";position:absolute;right:-80px;top:-80px;width:260px;height:260px;border-radius:50%;
+  background:radial-gradient(circle,rgba(216,163,68,.18),transparent 65%);
+  pointer-events:none;
+}
+.eyebrow{color:var(--gold-2);font-size:10px;letter-spacing:.24em;text-transform:uppercase}
+.hero-title{margin:10px 0 9px;font-size:clamp(30px,4vw,52px);line-height:.95;letter-spacing:-.045em}
+.hero-title span{color:transparent;-webkit-text-stroke:1px rgba(243,241,234,.5)}
+.hero-copy{margin:0;max-width:680px;color:var(--muted);font-size:13px;line-height:1.75}
+.hero-side{
+  padding:24px;display:flex;flex-direction:column;justify-content:space-between;
+  background:
+   linear-gradient(150deg,rgba(216,163,68,.08),transparent 50%),
+   var(--card);
+}
+.side-kicker{font-size:9px;color:var(--gold);letter-spacing:.2em;text-transform:uppercase}
+.side-number{font-size:40px;font-weight:800;letter-spacing:-.05em;margin:8px 0}
+.side-label{color:var(--muted);font-size:12px}
+.side-bottom{display:flex;align-items:center;justify-content:space-between;margin-top:18px}
+.status-dot{display:inline-flex;align-items:center;gap:8px;color:#b7c0c4;font-size:10px;text-transform:uppercase;letter-spacing:.12em}
+.status-dot i{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 16px rgba(105,209,132,.6)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:18px}
+.stat{
+  padding:18px;border:1px solid var(--line);border-radius:15px;
+  background:linear-gradient(145deg,#10151a,#0c1114);
+}
+.stat small{display:block;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.16em}
+.stat strong{display:block;font-size:28px;margin-top:6px;letter-spacing:-.04em}
+.stat strong.gold{color:var(--gold-2)}
+.grid{display:grid;grid-template-columns:1fr .95fr;gap:18px;align-items:start}
+.card{padding:22px}
+.card-title-row{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:15px;
+  margin-bottom:18px;
+}
+.card-title{margin:0;font-size:17px;letter-spacing:-.02em}
+.card-sub{color:var(--muted);font-size:11px;margin-top:5px;line-height:1.5}
+.tiny-badge{
+  border:1px solid var(--line);border-radius:999px;padding:6px 9px;
+  font-size:8px;letter-spacing:.14em;text-transform:uppercase;color:#c0c7ca;
+}
+.form{
+  display:grid;gap:14px;
+}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field label{display:block;margin-bottom:7px;color:#bbc2c5;font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.input{
+  width:100%;min-height:45px;padding:0 13px;border-radius:10px;
+  color:var(--text);background:#090d10;border:1px solid var(--line);
+  outline:none;transition:.25s;
+}
+.input:focus{border-color:var(--line-strong);box-shadow:0 0 0 4px rgba(216,163,68,.06)}
+.duration-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.chip{
+  padding:8px 10px;border-radius:999px;border:1px solid var(--line);
+  background:#0b1013;color:#98a0a4;font-size:9px;font-weight:700;letter-spacing:.08em;
+}
+.chip:hover,.chip.active{border-color:rgba(216,163,68,.45);color:var(--gold-2);background:var(--gold-soft)}
+.switch-row{
+  display:flex;align-items:center;justify-content:space-between;gap:15px;
+  padding:13px 14px;border:1px solid var(--line);background:#0a0e11;border-radius:12px;
+}
+.switch-copy strong{display:block;font-size:11px}
+.switch-copy small{display:block;color:var(--muted);font-size:9px;margin-top:3px}
+.switch{position:relative;width:42px;height:24px;flex:0 0 42px}
+.switch input{opacity:0;width:0;height:0}
+.slider{
+  position:absolute;inset:0;border-radius:999px;background:#20282d;border:1px solid var(--line);transition:.2s;
+}
+.slider:before{
+  content:"";position:absolute;width:16px;height:16px;left:3px;top:3px;border-radius:50%;
+  background:#6f797e;transition:.2s;
+}
+.switch input:checked + .slider{background:rgba(216,163,68,.24);border-color:rgba(216,163,68,.5)}
+.switch input:checked + .slider:before{transform:translateX(18px);background:var(--gold-2)}
+.actions-row{display:flex;gap:9px;flex-wrap:wrap}
+.qr-empty{
+  min-height:310px;border:1px dashed rgba(255,255,255,.12);border-radius:14px;
+  display:grid;place-items:center;text-align:center;padding:20px;color:var(--muted);
+  background:
+    radial-gradient(circle at 50% 0%,rgba(216,163,68,.07),transparent 45%),
+    #0a0e10;
+}
+.qr-empty .qr-symbol{
+  width:84px;height:84px;border:1px solid rgba(216,163,68,.35);border-radius:14px;display:grid;place-items:center;margin:auto auto 13px;
+  color:var(--gold-2);font-size:28px;
+}
+.qr-empty strong{display:block;color:#d3d7d8;font-size:14px}
+.qr-empty p{margin:6px auto 0;max-width:310px;font-size:10px;line-height:1.6}
+.qr-result{display:none}
+.qr-result-grid{display:grid;grid-template-columns:200px 1fr;gap:18px;align-items:center}
+.qr-box{
+  padding:14px;background:#fff;border-radius:14px;border:6px solid #fff;box-shadow:0 12px 30px rgba(0,0,0,.3);
+}
+.qr-box img{width:100%;display:block}
+.url-box{
+  border:1px solid var(--line);border-radius:12px;background:#0a0e11;padding:12px;
+}
+.url-box small{display:block;color:var(--muted);font-size:8px;text-transform:uppercase;letter-spacing:.16em;margin-bottom:7px}
+.url-box code{display:block;word-break:break-all;color:#d9dddf;font-size:10px;line-height:1.5}
+.result-meta{display:flex;gap:8px;flex-wrap:wrap;margin:11px 0}
+.meta{
+  padding:7px 9px;border:1px solid var(--line);border-radius:8px;color:#aab1b4;font-size:9px;
+  background:#0c1114;
+}
+.toolbar{
+  margin-top:18px;padding-top:18px;border-top:1px solid var(--line);
+  display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.search{
+  min-height:40px;min-width:250px;padding:0 12px;border-radius:9px;background:#090d10;border:1px solid var(--line);color:var(--text);outline:none;
+}
+.search:focus{border-color:var(--line-strong)}
+.token-wrap{overflow:auto;border:1px solid var(--line);border-radius:13px}
+table{width:100%;border-collapse:collapse;min-width:760px}
+thead{background:#0b1013}
+th,td{padding:13px 14px;border-bottom:1px solid rgba(255,255,255,.06);text-align:left;font-size:10px}
+th{color:#7e888c;text-transform:uppercase;letter-spacing:.12em;font-size:8px}
+td{color:#c6ccce}
+tbody tr:hover{background:rgba(216,163,68,.035)}
+tbody tr:last-child td{border-bottom:0}
+.token-mask{color:#7f8a8f;font-family:ui-monospace,SFMono-Regular,Consolas,monospace}
+.badge{
+  display:inline-flex;align-items:center;gap:6px;padding:5px 8px;border-radius:999px;font-size:8px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;
+}
+.badge:before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.badge.ok{color:var(--green);background:rgba(105,209,132,.08)}
+.badge.bad{color:var(--red);background:rgba(239,107,103,.07)}
+.badge.warn{color:var(--gold-2);background:rgba(216,163,68,.08)}
+.badge.info{color:var(--blue);background:rgba(108,168,255,.07)}
+.table-actions{display:flex;gap:6px;flex-wrap:wrap}
+.btn-mini{
+  min-height:31px;padding:0 10px;border-radius:8px;border:1px solid var(--line);
+  background:#0a0f12;color:#c6ccce;font-size:8px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+}
+.btn-mini:hover{border-color:var(--line-strong);color:var(--gold-2)}
+.empty-table{text-align:center;padding:36px;color:var(--muted)}
+.toast{
+  position:fixed;right:18px;bottom:18px;z-index:100;
+  padding:12px 14px;border:1px solid var(--line-strong);border-radius:12px;
+  background:rgba(12,16,19,.96);box-shadow:var(--shadow);
+  transform:translateY(16px);opacity:0;pointer-events:none;transition:.25s;
+  font-size:10px;color:#d9dddf;max-width:320px;
+}
+.toast.show{transform:none;opacity:1}
+.toast.good{border-color:rgba(105,209,132,.35)}
+.toast.bad{border-color:rgba(239,107,103,.35)}
+.footer{margin-top:18px;text-align:center;color:#677176;font-size:9px;letter-spacing:.14em;text-transform:uppercase}
+@media(max-width:980px){
+  .hero,.grid{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:650px){
+  .wrap{width:min(100% - 22px,1280px)}
+  .header-in{min-height:70px}
+  .brand-copy small{display:none}
+  .header-actions .btn:not(.gold){display:none}
+  .hero-main,.hero-side,.card{padding:18px}
+  .stats{grid-template-columns:1fr 1fr}
+  .field-grid{grid-template-columns:1fr}
+  .qr-result-grid{grid-template-columns:1fr}
+  .qr-box{max-width:220px;margin:auto}
+  .search{min-width:100%;width:100%}
+}
+@media print{
+  body *{visibility:hidden!important}
+  .qr-result,.qr-result *{visibility:visible!important}
+  .qr-result{display:block!important;position:absolute;left:50%;top:30px;transform:translateX(-50%);width:340px}
+  .qr-box{box-shadow:none}
+}
+</style>
+
+<style>
+.api-debug{margin-top:14px;border:1px solid rgba(239,107,103,.2);background:rgba(239,107,103,.03);border-radius:12px;padding:10px 12px;display:none}
+.api-debug.show{display:block}
+.api-debug strong{display:block;color:#f19a96;font-size:9px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+.api-debug span{display:block;color:#929b9f;font-size:10px;line-height:1.5;word-break:break-word}
+</style>
+</head>
+<body>
+<div class="topline"></div>
+
+<header class="header">
+  <div class="wrap header-in">
+    <a href="#" class="brand">
+      <div class="brand-mark"><span>GM</span></div>
+      <div class="brand-copy">
+        <strong>GÖRKEM YÖNETİM</strong>
+        <small>Yönetici Kontrol Merkezi</small>
+      </div>
+    </a>
+    <div class="header-actions">
+      <button class="btn" id="refreshBtn" type="button">↻ Yenile</button>
+      <a class="btn gold" href="/admin-logout">Sistemden Çık</a>
+    </div>
+  </div>
+</header>
+
+<main class="page">
+<div class="wrap">
+
+  <section class="hero">
+    <div class="hero-main">
+      <div class="eyebrow">Görkem Makine · Güvenli Erişim</div>
+      <h1 class="hero-title">SİSTEMİN<br><span>KONTROLÜ SENDE.</span></h1>
+      <p class="hero-copy">
+        QR erişimleri oluştur, sürelerini yönet, aktif bağlantıları takip et ve gerektiğinde erişimi anında iptal et.
+      </p>
+    </div>
+    <div class="hero-side">
+      <div>
+        <div class="side-kicker">Sistem Durumu</div>
+        <div class="side-number">ADMIN / 01</div>
+        <div class="side-label">QR erişim yönetimi aktif.</div>
+      </div>
+      <div class="side-bottom">
+        <div class="status-dot"><i></i> Sistem çevrimiçi</div>
+        <span class="tiny-badge">LOCAL CONTROL</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="stat"><small>Toplam Token</small><strong id="statTotal">—</strong></div>
+    <div class="stat"><small>Aktif</small><strong class="gold" id="statActive">—</strong></div>
+    <div class="stat"><small>Kullanılmış</small><strong id="statUsed">—</strong></div>
+    <div class="stat"><small>Süresi Dolan</small><strong id="statExpired">—</strong></div>
+  </section>
+
+  <section class="grid">
+
+    <div class="card">
+      <div class="card-title-row">
+        <div>
+          <h2 class="card-title">Yeni QR Oluştur</h2>
+          <div class="card-sub">Yeni erişim bağlantısının süresini ve kullanım tipini belirle.</div>
+        </div>
+        <span class="tiny-badge">QR ACCESS</span>
+      </div>
+
+      <div class="form">
+        <div class="field">
+          <label for="duration">Geçerlilik Süresi · Dakika</label>
+          <input class="input" type="number" id="duration" value="30" min="1" max="10080">
+          <div class="duration-row">
+            <button class="chip" data-min="10" type="button">10 dk</button>
+            <button class="chip active" data-min="30" type="button">30 dk</button>
+            <button class="chip" data-min="60" type="button">1 saat</button>
+            <button class="chip" data-min="180" type="button">3 saat</button>
+            <button class="chip" data-min="1440" type="button">24 saat</button>
+          </div>
+        </div>
+
+        <div class="switch-row">
+          <div class="switch-copy">
+            <strong>Tek Kullanımlık Erişim</strong>
+            <small>QR bir kez kullanıldıktan sonra geçersiz olur.</small>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="singleUse">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="actions-row">
+          <button class="btn gold" style="flex:1" type="button" id="generateBtn">＋ QR Oluştur</button>
+          <button class="btn" type="button" id="clearBtn">Temizle</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title-row">
+        <div>
+          <h2 class="card-title">Erişim Kodu</h2>
+          <div class="card-sub">Oluşturduğun son QR bağlantısı burada görüntülenir.</div>
+        </div>
+        <span class="tiny-badge">LIVE PREVIEW</span>
+      </div>
+
+      <div class="qr-empty" id="qrEmpty">
+        <div>
+          <div class="qr-symbol">▦</div>
+          <strong>Henüz QR oluşturulmadı</strong>
+          <p>Soldaki formdan süreyi seçip yeni bir erişim kodu oluştur.</p>
+        </div>
+      </div>
+
+      <div class="qr-result" id="qrResult">
+        <div class="qr-result-grid">
+          <div class="qr-box"><img id="qrImg" alt="QR Kod"></div>
+          <div>
+            <div class="eyebrow">Hazır · Erişim Bağlantısı</div>
+            <div class="result-meta">
+              <span class="meta" id="qrExpiry">—</span>
+              <span class="meta" id="qrType">—</span>
+            </div>
+            <div class="url-box">
+              <small>Erişim adresi</small>
+              <code id="qrUrl">—</code>
+            </div>
+            <div class="actions-row" style="margin-top:10px">
+              <button class="btn" type="button" id="copyBtn">⧉ Kopyala</button>
+              <button class="btn" type="button" id="printBtn">⎙ Yazdır</button>
+              <a class="btn" id="openBtn" target="_blank" rel="noopener">↗ Aç</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <section class="card" style="margin-top:18px">
+    <div class="card-title-row">
+      <div>
+        <h2 class="card-title">Aktif Tokenlar</h2>
+        <div class="card-sub">Oluşturulan erişim kodlarını tek panelden kontrol et.</div>
+      </div>
+      <span class="tiny-badge" id="tokenCountBadge">0 KAYIT</span>
+    </div>
+
+    <div class="toolbar">
+      <input class="search" id="search" type="search" placeholder="Token, tür veya durum ara...">
+      <div class="actions-row">
+        <button class="btn" type="button" id="refreshTableBtn">↻ Listeyi Yenile</button>
+      </div>
+    </div>
+
+    <div class="token-wrap" style="margin-top:14px">
+      <table>
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>Oluşturulma</th>
+            <th>Bitiş</th>
+            <th>Tür</th>
+            <th>Durum</th>
+            <th>İşlem</th>
+          </tr>
+        </thead>
+        <tbody id="tokenList">
+          <tr><td colspan="6" class="empty-table">Tokenlar yükleniyor…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="footer">GÖRKEM MAKİNE · YÖNETİCİ KONTROL MERKEZİ</div>
+</div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+let tokenCache = [];
+let lastQR = null;
+
+function showToast(message, type=""){
+  const t = $("toast");
+  t.textContent = message;
+  t.className = "toast show " + type;
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => t.className = "toast", 3600);
+}
+
+function fmtDate(ts){
+  if(!ts) return "—";
+  const d = new Date(ts);
+  if(Number.isNaN(d.getTime())) return String(ts);
+  return d.toLocaleString("tr-TR", {
+    day:"2-digit", month:"2-digit", year:"numeric",
+    hour:"2-digit", minute:"2-digit"
+  });
+}
+
+function isExpired(t){
+  return Number.isFinite(Number(t.expiresAt)) && Date.now() > Number(t.expiresAt);
+}
+
+function statusOf(t){
+  if(t.active === false) return {text:"İptal", cls:"bad"};
+  if(t.used === true) return {text:"Kullanıldı", cls:"warn"};
+  if(isExpired(t)) return {text:"Süresi Doldu", cls:"bad"};
+  return {text:"Aktif", cls:"ok"};
+}
+
+function maskToken(token){
+  if(!token) return "—";
+  return "••••••" + String(token).slice(-6);
+}
+
+function updateStats(){
+  const total = tokenCache.length;
+  const active = tokenCache.filter(t => statusOf(t).text === "Aktif").length;
+  const used = tokenCache.filter(t => t.used === true).length;
+  const expired = tokenCache.filter(t => isExpired(t) && !t.used && t.active !== false).length;
+  $("statTotal").textContent = total;
+  $("statActive").textContent = active;
+  $("statUsed").textContent = used;
+  $("statExpired").textContent = expired;
+  $("tokenCountBadge").textContent = total + " KAYIT";
+}
+
+function renderTokens(){
+  const q = $("search").value.trim().toLowerCase();
+  const list = [...tokenCache].reverse().filter(t => {
+    const st = statusOf(t).text.toLowerCase();
+    const type = t.singleUse ? "tek kullanım" : "çoklu";
+    const masked = maskToken(t.token).toLowerCase();
+    return !q || st.includes(q) || type.includes(q) || masked.includes(q) ||
+      String(t.token || "").toLowerCase().includes(q);
+  });
+
+  const tbody = $("tokenList");
+  tbody.innerHTML = "";
+
+  if(!list.length){
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+    td.colSpan = 6;
+    td.className = "empty-table";
+    td.textContent = tokenCache.length ? "Aramana uygun kayıt bulunamadı." : "Henüz token oluşturulmadı.";
+    tr.appendChild(td);
+    tbody.appendChild(tr);
+    updateStats();
+    return;
+  }
+
+  for(const t of list){
+    const st = statusOf(t);
+    const tr = document.createElement("tr");
+
+    const cells = [
+      (() => {
+        const td=document.createElement("td");
+        const el=document.createElement("span");
+        el.className="token-mask";
+        el.textContent=maskToken(t.token);
+        td.appendChild(el); return td;
+      })(),
+      (() => { const td=document.createElement("td"); td.textContent=fmtDate(t.createdAt); return td; })(),
+      (() => { const td=document.createElement("td"); td.textContent=fmtDate(t.expiresAt); return td; })(),
+      (() => {
+        const td=document.createElement("td");
+        const b=document.createElement("span"); b.className="badge info"; b.textContent=t.singleUse?"Tek Kullanım":"Çoklu";
+        td.appendChild(b); return td;
+      })(),
+      (() => {
+        const td=document.createElement("td");
+        const b=document.createElement("span"); b.className="badge "+st.cls; b.textContent=st.text;
+        td.appendChild(b); return td;
+      })(),
+      (() => {
+        const td=document.createElement("td");
+        const wrap=document.createElement("div"); wrap.className="table-actions";
+        if(t.active !== false){
+          const b=document.createElement("button"); b.className="btn-mini"; b.textContent="İptal Et";
+          b.addEventListener("click", ()=>revoke(t.token)); wrap.appendChild(b);
+        }else{
+          const dash=document.createElement("span"); dash.style.color="var(--muted)"; dash.textContent="—"; wrap.appendChild(dash);
+        }
+        td.appendChild(wrap); return td;
+      })()
+    ];
+    cells.forEach(td=>tr.appendChild(td));
+    tbody.appendChild(tr);
+  }
+  updateStats();
+}
+
+/* ---- API RESPONSE FIX ----
+   Bazı sunucular JSON yerine XML döndürüyor.
+   Bu fonksiyon artık JSON + XML + HTML hata cevaplarını okuyabiliyor.
+*/
+async function readResponse(res){
+  const raw = await res.text();
+  const type = (res.headers.get("content-type") || "").toLowerCase();
+  const clean = raw.replace(/^\uFEFF/, "").trim();
+
+  // JSON
+  if(type.includes("application/json") || clean.startsWith("{") || clean.startsWith("[")){
+    try{
+      return {ok:res.ok, data:JSON.parse(clean), raw};
+    }catch{}
+  }
+
+  // XML
+  if(type.includes("xml") || clean.startsWith("<?xml") || clean.startsWith("<")){
+    try{
+      const doc = new DOMParser().parseFromString(clean, "application/xml");
+      const parserError = doc.querySelector("parsererror");
+      if(!parserError){
+        const getText = (...names) => {
+          for(const n of names){
+            const el = doc.getElementsByTagName(n)[0];
+            if(el && el.textContent.trim()) return el.textContent.trim();
+          }
+          return "";
+        };
+        const bool = (...names) => {
+          const v = getText(...names).toLowerCase();
+          return v === "true" || v === "1" || v === "yes";
+        };
+        const data = {
+          success: bool("success","ok") || !!getText("accessUrl","accessURL","qrImage","qr","token"),
+          message: getText("message","Message","error","Error"),
+          code: getText("code","Code"),
+          accessUrl: getText("accessUrl","accessURL","url","URL","link"),
+          qrImage: getText("qrImage","qr","qrCode","image","imageUrl"),
+          token: getText("token","Token"),
+          expiresAt: getText("expiresAt","expires","expiry"),
+          createdAt: getText("createdAt","created"),
+          used: bool("used"),
+          active: !["false","0","no"].includes(getText("active").toLowerCase()),
+          singleUse: bool("singleUse","single_use")
+        };
+
+        // token list XML: <tokens><token>...</token></tokens>
+        const tokenNodes = [...doc.getElementsByTagName("token")];
+        const list = tokenNodes.filter(n => n.children.length).map(n => {
+          const obj = {};
+          [...n.children].forEach(c => obj[c.tagName] = c.textContent.trim());
+          if(obj.expiresAt) obj.expiresAt = Number(obj.expiresAt) || obj.expiresAt;
+          if(obj.createdAt) obj.createdAt = Number(obj.createdAt) || obj.createdAt;
+          ["active","used","singleUse"].forEach(k => {
+            if(k in obj) obj[k] = ["true","1","yes"].includes(String(obj[k]).toLowerCase());
+          });
+          return obj;
+        });
+        if(list.length) data.tokens = list;
+
+        return {ok:res.ok, data, raw};
+      }
+    }catch{}
+  }
+
+  // HTML or plain text error
+  const titleMatch = clean.match(/<title[^>]*>([\s\S]*?)<\/title>/i);
+  const textOnly = clean.replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim();
+  return {
+    ok:res.ok,
+    data:{
+      success:false,
+      message:titleMatch ? titleMatch[1].trim() : (textOnly || `Sunucu ${res.status} döndürdü.`)
+    },
+    raw
+  };
+}
+
+async function api(path, options={}){
+  const res = await fetch(path, {
+    credentials:"same-origin",
+    cache:"no-store",
+    ...options,
+    headers:{
+      "Accept":"application/json, application/xml, text/xml, text/plain, */*",
+      ...(options.headers || {})
+    }
+  });
+  return readResponse(res);
+}
+
+async function fetchTokens(){
+  try{
+    const result = await api("/api/tokens");
+    const data = result.data;
+
+    if(Array.isArray(data)) tokenCache = data;
+    else if(Array.isArray(data.tokens)) tokenCache = data.tokens;
+    else if(Array.isArray(data.data)) tokenCache = data.data;
+    else {
+      tokenCache = [];
+      if(!result.ok) throw new Error(data.message || "Token listesi alınamadı.");
+    }
+
+    renderTokens();
+  }catch(err){
+    console.error(err);
+    $("tokenList").innerHTML = '<tr><td colspan="6" class="empty-table">Token listesi alınamadı.</td></tr>';
+    showToast(err.message || "Token listesi alınamadı.", "bad");
+  }
+}
+
+function normalizeQrData(data){
+  // accept several common backend field names
+  const qrImage = data.qrImage || data.qrCode || data.image || data.imageUrl || data.qr;
+  const accessUrl = data.accessUrl || data.accessURL || data.url || data.link;
+  const token = data.token || data.accessToken;
+  const expiresAt = data.expiresAt || data.expiry || data.expires;
+  const success = data.success !== false && (!!qrImage || !!accessUrl || !!token);
+
+  return {success, qrImage, accessUrl, token, expiresAt, message:data.message || data.error || ""};
+}
+
+function fallbackQrImage(url){
+  if(!url) return "";
+  return "https://api.qrserver.com/v1/create-qr-code/?size=420x420&margin=10&data=" + encodeURIComponent(url);
+}
+
+async function generateQR(){
+  const duration = Number($("duration").value);
+  const singleUse = $("singleUse").checked;
+
+  if(!Number.isFinite(duration) || duration < 1){
+    showToast("Geçerlilik süresi en az 1 dakika olmalı.", "bad");
+    return;
+  }
+
+  const btn = $("generateBtn");
+  const old = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = "Oluşturuluyor…";
+
+  try{
+    const result = await api("/api/generate-qr", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({durationMins:duration, singleUse})
+    });
+
+    const data = normalizeQrData(result.data);
+
+    // Redirect/login XML/HTML durumunu açık şekilde yakala
+    if(!result.ok || !data.success){
+      const serverHint = result.data?.message || "Sunucu QR oluşturma isteğini JSON/uygun XML olarak kabul etmedi.";
+      throw new Error(serverHint);
+    }
+
+    let qrImage = data.qrImage;
+    if(qrImage && !/^data:image\//i.test(qrImage) && !/^https?:\/\//i.test(qrImage) && !qrImage.startsWith("/")){
+      qrImage = "/" + qrImage;
+    }
+    if(!qrImage && data.accessUrl){
+      qrImage = fallbackQrImage(data.accessUrl);
+    }
+
+    lastQR = {...data, qrImage};
+
+    $("qrEmpty").style.display = "none";
+    $("qrResult").style.display = "block";
+    if(qrImage) $("qrImg").src = qrImage;
+    $("qrUrl").textContent = data.accessUrl || "—";
+    $("qrExpiry").textContent = data.expiresAt ? "Bitiş: " + fmtDate(data.expiresAt) : duration + " dk geçerli";
+    $("qrType").textContent = singleUse ? "Tek kullanımlık" : "Çoklu kullanım";
+    $("openBtn").href = data.accessUrl || "#";
+
+    await fetchTokens();
+    showToast("Yeni erişim QR kodu hazır.", "good");
+  }catch(err){
+    console.error(err);
+    showToast(err.message || "QR oluşturulamadı.", "bad");
+  }finally{
+    btn.disabled = false;
+    btn.innerHTML = old;
+  }
+}
+
+async function revoke(token){
+  if(!confirm("Bu erişim kodunu iptal etmek istediğine emin misin?")) return;
+  try{
+    const result = await api("/api/revoke-token", {
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({token})
+    });
+    if(!result.ok || result.data.success === false) throw new Error(result.data.message || "Token iptal edilemedi.");
+    await fetchTokens();
+    showToast("Erişim kodu iptal edildi.", "good");
+  }catch(err){
+    showToast(err.message || "İptal işlemi başarısız.", "bad");
+  }
+}
+
+async function copyURL(){
+  if(!lastQR?.accessUrl) return;
+  try{
+    await navigator.clipboard.writeText(lastQR.accessUrl);
+    showToast("Erişim adresi panoya kopyalandı.", "good");
+  }catch{
+    showToast("Kopyalama başarısız oldu.", "bad");
+  }
+}
+
+function clearQR(){
+  lastQR = null;
+  $("qrEmpty").style.display = "grid";
+  $("qrResult").style.display = "none";
+}
+
+document.querySelectorAll(".chip").forEach(chip => {
+  chip.addEventListener("click", () => {
+    $("duration").value = chip.dataset.min;
+    document.querySelectorAll(".chip").forEach(x => x.classList.remove("active"));
+    chip.classList.add("active");
+  });
+});
+$("duration").addEventListener("input", () => {
+  document.querySelectorAll(".chip").forEach(x => x.classList.remove("active"));
+});
+$("generateBtn").addEventListener("click", generateQR);
+$("clearBtn").addEventListener("click", clearQR);
+$("copyBtn").addEventListener("click", copyURL);
+$("printBtn").addEventListener("click", () => window.print());
+$("refreshBtn").addEventListener("click", fetchTokens);
+$("refreshTableBtn").addEventListener("click", fetchTokens);
+$("search").addEventListener("input", renderTokens);
+
+fetchTokens();
+</script>
+</body>
+</html>

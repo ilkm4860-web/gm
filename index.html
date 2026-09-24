@@ -61,7 +61,7 @@ section{padding:115px 0}.head{display:flex;justify-content:space-between;align-i
 .cards{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
 .machine{grid-column:span 4;position:relative;min-height:330px;overflow:hidden;border:1px solid var(--line);background:var(--panel);transition:.4s}
 .machine.big{grid-column:span 8;min-height:430px}.machine:hover{transform:translateY(-5px);border-color:rgba(215,165,67,.42)}
-.machine img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.55) saturate(.78);transition:.6s}.machine:hover img{transform:scale(1.04);filter:brightness(.70) saturate(.92)}
+.machine img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.55) saturate(.78);transition:transform .75s cubic-bezier(.2,.7,.2,1),filter .6s ease}.machine:hover img{transform:scale(1.09);filter:brightness(.70) saturate(.92)}
 .machine:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 23%,rgba(2,3,4,.1) 40%,rgba(2,3,4,.97) 100%)}
 .machine-info{position:absolute;z-index:2;left:22px;right:22px;bottom:21px}.machine-tag{color:var(--gold2);font-size:8px;letter-spacing:.2em;text-transform:uppercase}.machine h3{font-size:28px;letter-spacing:-.03em;margin:7px 0}.machine p{color:#a0a7aa;font-size:11px;margin:0}.arrow{position:absolute;right:0;bottom:0;width:37px;height:37px;border:1px solid rgba(255,255,255,.16);display:grid;place-items:center;color:var(--gold2)}
 .waiting{background:linear-gradient(145deg,#0d1316,#080b0d);display:flex;align-items:end}.waiting:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 70% 30%,rgba(215,165,67,.12),transparent 35%)}
@@ -69,13 +69,52 @@ section{padding:115px 0}.head{display:flex;justify-content:space-between;align-i
 .sale{min-height:640px;display:flex;align-items:center;background:linear-gradient(90deg,rgba(5,7,8,.98),rgba(5,7,8,.82) 42%,rgba(5,7,8,.25)),url("carter-6.jpg") center/cover}
 .sale .box{max-width:650px}.number{font-size:120px;line-height:.72;color:transparent;-webkit-text-stroke:1px rgba(215,165,67,.4)}.sale h2{font-size:clamp(46px,5vw,72px);line-height:.92;margin:24px 0}.sale p{max-width:550px;color:#9aa2a5;font-size:13px;line-height:1.8}.badges{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}.badge{border:1px solid var(--line);padding:8px 10px;font-size:8px;letter-spacing:.12em;text-transform:uppercase;background:rgba(255,255,255,.03)}
 .parts{background:#090c0e}.parts-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:15px}.parts-main{min-height:520px;padding:36px;display:flex;flex-direction:column;justify-content:end;border:1px solid var(--line);background:linear-gradient(180deg,transparent 25%,rgba(0,0,0,.95)),url("komatsu-hero.jpg") center/cover}.parts-main h3{font-size:42px;line-height:.95;margin:10px 0}.parts-main p{max-width:520px;color:#99a1a4;font-size:12px;line-height:1.8}.parts-list{display:grid;grid-template-columns:1fr 1fr;gap:9px}.part{padding:19px;border:1px solid var(--line);background:linear-gradient(145deg,#101518,#0a0e10);min-height:108px}.part b{font-size:13px}.part small{display:block;color:#7d878b;font-size:9px;line-height:1.5;margin-top:7px}
-.rental{background:linear-gradient(180deg,#07090a,#0d1113)}.rental-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.rental-card{position:relative;min-height:220px;overflow:hidden;border:1px solid var(--line)}.rental-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.53) saturate(.78)}.rental-card:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 20%,rgba(0,0,0,.95) 100%)}.rental-info{position:absolute;z-index:2;left:16px;right:16px;bottom:15px}.rental-info span{font-size:7px;color:var(--gold2);letter-spacing:.18em;text-transform:uppercase}.rental-info h3{font-size:17px;margin:5px 0 0}
+.rental{background:linear-gradient(180deg,#07090a,#0d1113)}.rental-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.rental-card{position:relative;min-height:220px;overflow:hidden;border:1px solid var(--line)}.rental-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.53) saturate(.78);transition:transform .75s cubic-bezier(.2,.7,.2,1),filter .6s ease}.rental-card:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 20%,rgba(0,0,0,.95) 100%)}.rental-card:hover img{transform:scale(1.09);filter:brightness(.68) saturate(.9)}
+.rental-info{position:absolute;z-index:2;left:16px;right:16px;bottom:15px}.rental-info span{font-size:7px;color:var(--gold2);letter-spacing:.18em;text-transform:uppercase}.rental-info h3{font-size:17px;margin:5px 0 0}
 .rental-empty{display:flex;align-items:end;padding:19px;background:linear-gradient(145deg,#13191c,#080b0d)}.rental-empty h3{font-size:19px}.rental-empty p{color:#7d878b;font-size:9px;line-height:1.55}
 .contact{background:linear-gradient(90deg,rgba(6,8,9,.97),rgba(6,8,9,.74)),url("assets/hidromek-4cx.jpg") center/cover}.phones{display:grid;grid-template-columns:1fr 1fr;gap:12px}.phone{padding:28px;border:1px solid var(--line);background:rgba(9,12,14,.78);backdrop-filter:blur(10px)}.phone small{display:block;color:var(--gold2);font-size:8px;letter-spacing:.18em;text-transform:uppercase}.phone a{display:block;font-size:29px;margin-top:10px}.phone a:hover{color:var(--gold2)}
 footer{border-top:1px solid var(--line);padding:28px 0;color:#667075;font-size:8px;letter-spacing:.13em;text-transform:uppercase}.foot{display:flex;justify-content:space-between;gap:18px}
 .reveal{opacity:0;transform:translateY(22px);transition:.75s}.reveal.show{opacity:1;transform:none}
 @media(max-width:900px){.links{display:none}.hero{min-height:910px}.stats{position:relative;right:auto;bottom:auto;margin-top:45px;width:max-content}.machine,.machine.big{grid-column:span 12}.parts-grid{grid-template-columns:1fr}.rental-grid{grid-template-columns:1fr 1fr}.phones{grid-template-columns:1fr}}
 @media(max-width:560px){.wrap{width:calc(100% - 24px)}section{padding:85px 0}.stats{grid-template-columns:1fr 1fr}.stat:last-child{display:none}.parts-list{grid-template-columns:1fr}.rental-grid{grid-template-columns:1fr}.phone a{font-size:23px}.foot{flex-direction:column}}
+
+/* WhatsApp floating button */
+.whatsapp-float{
+  position:fixed;right:24px;bottom:24px;z-index:100;
+  width:68px;height:68px;border-radius:50%;
+  display:grid;place-items:center;overflow:visible;
+  background:#25D366;border:3px solid rgba(255,255,255,.92);
+  box-shadow:0 12px 34px #0008;
+  transition:transform .22s ease,box-shadow .22s ease;
+}
+.whatsapp-float img{
+  display:block;width:100%;height:100%;
+  border-radius:50%;object-fit:cover;
+}
+.whatsapp-float:hover{
+  transform:scale(1.16);
+  box-shadow:0 18px 48px #000a,0 0 0 6px #25D36622;
+}
+.whatsapp-float::after{
+  content:"WhatsApp";
+  position:absolute;right:78px;top:50%;
+  transform:translateY(-50%) translateX(8px);
+  opacity:0;pointer-events:none;white-space:nowrap;
+  padding:8px 11px;border:1px solid var(--line);
+  border-radius:8px;background:#0b0e10;color:#f2f1eb;
+  font-size:9px;letter-spacing:1px;font-weight:800;
+  transition:.2s;
+}
+.whatsapp-float:hover::after{
+  opacity:1;transform:translateY(-50%);
+}
+@media(max-width:560px){
+  .whatsapp-float{
+    width:58px;height:58px;right:14px;bottom:14px;
+  }
+  .whatsapp-float::after{display:none}
+}
+
 </style>
 </head>
 <body>
@@ -168,5 +207,8 @@ footer{border-top:1px solid var(--line);padding:28px 0;color:#667075;font-size:8
 const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')}),{threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 </script>
+<a class="whatsapp-float" href="https://wa.me/905421551677" target="_blank" rel="noopener noreferrer" aria-label="Görkem Makine WhatsApp">
+  <img src="whatsapp.png" alt="WhatsApp">
+</a>
 </body>
 </html>
